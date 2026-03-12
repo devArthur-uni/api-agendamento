@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Medico extends Model
+class Medico extends Model 
 {
-    //
+    protected $fillable = [
+        'nome',
+        'sobrenome',
+        'crm'
+    ];
 }

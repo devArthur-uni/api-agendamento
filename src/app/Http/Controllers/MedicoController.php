@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Domain\Medico;
+use App\Models\Medico as MedicoModel;
 
 class MedicoController extends Controller
 {
     public function index()
+{
+    $medicos = MedicoModel::all();
 
-    {
-        return response()->json([
-            "medicos" => []
-        ]);
-    }
+    return response()->json([
+        "medicos" => $medicos
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -22,15 +23,16 @@ class MedicoController extends Controller
             'sobrenome' => 'required|string',
             'crm' => 'required|string'
         ]);
-        $nome = $request->input('nome');
-        $sobrenome = $request->input('sobrenome');
-        $crm = $request->input('crm');
 
-        $medico = new Medico($nome, $sobrenome, $crm);
+        $medico = MedicoModel::create([
+            "nome" => $request->nome,
+            "sobrenome" => $request->sobrenome,
+            "crm" => $request->crm
+        ]);
 
         return response()->json([
             "mensagem" => "Médico cadastrado!",
-            "medico" => $medico->getInformacoes()
+            "medico" => $medico
         ]);
     }
 }

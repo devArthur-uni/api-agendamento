@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Domain\Paciente;
+use App\Models\Paciente as PacienteModel;
 
 class PacienteController extends Controller
 {
-
     public function index()
     {
+        $pacientes = PacienteModel::all();
+
         return response()->json([
-            "pacientes" => []
+            "pacientes" => $pacientes
         ]);
     }
 
@@ -21,23 +22,19 @@ class PacienteController extends Controller
             'nome' => 'required|string',
             'sobrenome' => 'required|string',
             'cpf' => 'required|string',
-            'data_nascimento' => 'required|date_format:Y-m-d'
+            'data_nascimento' => 'required|date'
         ]);
-        $nome = $request->input('nome');
-        $sobrenome = $request->input('sobrenome');
-        $cpf = $request->input('cpf');
-        $dataNascimento = $request->input('data_nascimento');
 
-        $paciente = new Paciente(
-            $nome,
-            $sobrenome,
-            $cpf,
-            $dataNascimento
-        );
+        $paciente = PacienteModel::create([
+            "nome" => $request->nome,
+            "sobrenome" => $request->sobrenome,
+            "cpf" => $request->cpf,
+            "data_nascimento" => $request->data_nascimento
+        ]);
 
         return response()->json([
             "mensagem" => "Paciente cadastrado!",
-            "paciente" => $paciente->getInformacoes()
+            "paciente" => $paciente
         ]);
     }
 }
