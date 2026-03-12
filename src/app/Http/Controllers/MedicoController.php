@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Domain\Medico;
 
 class MedicoController extends Controller
 {
     public function index()
-    
+
     {
         return response()->json([
             "medicos" => []
@@ -15,18 +16,16 @@ class MedicoController extends Controller
     }
 
     public function store(Request $request)
-{
-    $nome = $request->input('nome');
-    $sobrenome = $request->input('sobrenome');
-    $crm = $request->input('crm');
+    {
+        $nome = $request->input('nome');
+        $sobrenome = $request->input('sobrenome');
+        $crm = $request->input('crm');
 
-    return response()->json([
-        "mensagem" => "Médico cadastrado",
-        "medico" => [
-            "nome" => $nome,
-            "sobrenome" => $sobrenome,
-            "crm" => $crm
-        ]
-    ]);
-}
+        $medico = new Medico($nome, $sobrenome, $crm);
+
+        return response()->json([
+            "mensagem" => "Médico cadastrado",
+            "medico" => $medico->getInformacoes()
+        ]);
+    }
 }
