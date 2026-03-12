@@ -1,59 +1,239 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Agendamento de Consultas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST desenvolvida para gerenciamento de **médicos, pacientes e consultas médicas**.
 
-## About Laravel
+O projeto foi desenvolvido utilizando **Laravel**, executado em containers **Docker** e utilizando **PostgreSQL** como banco de dados.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Tecnologias Utilizadas
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* PHP 8.4
+* Laravel
+* PostgreSQL
+* Docker
+* Docker Compose
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+# Pré-requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Para executar o projeto é necessário possuir instalado em sua máquina:
 
-## Laravel Sponsors
+* Docker
+* Docker Compose
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+# Como executar o projeto
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Acesse a pasta do projeto:
 
-## Contributing
+```bash
+cd api-agendamento
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Suba os containers Docker:
 
-## Code of Conduct
+```bash
+docker compose up -d --build
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Execute as migrations do banco de dados:
 
-## Security Vulnerabilities
+```bash
+docker compose exec app php artisan migrate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+A API estará disponível em:
 
-## License
+```
+http://localhost:8000
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Base URL da API:
+
+```
+http://localhost:8000/api
+```
+
+---
+
+# Banco de Dados
+
+O projeto utiliza **PostgreSQL** executando em um container Docker.
+
+As tabelas são criadas automaticamente através das **migrations do Laravel**.
+
+---
+
+# Endpoints da API
+
+## Médicos
+
+### Criar médico
+
+**POST**
+
+```
+/api/medicos
+```
+
+Body:
+
+```json
+{
+  "nome": "Arthur",
+  "sobrenome": "Zico",
+  "crm": "198120192025"
+}
+```
+
+Exemplo de resposta:
+
+```json
+{
+  "mensagem": "Médico cadastrado!",
+  "medico": {
+    "id": 1,
+    "nome": "Arthur",
+    "sobrenome": "Zico",
+    "crm": "198120192025",
+    "created_at": "2026-03-12T16:49:30.000000Z",
+    "updated_at": "2026-03-12T16:49:30.000000Z"
+  }
+}
+```
+
+---
+
+### Listar médicos
+
+**GET**
+
+```
+/api/medicos
+```
+
+---
+
+## Pacientes
+
+### Criar paciente
+
+**POST**
+
+```
+/api/pacientes
+```
+
+Body:
+
+```json
+{
+  "nome": "Giorgian",
+  "sobrenome": "De Arrascaeta",
+  "cpf": "1010101019",
+  "data_nascimento": "2019-11-23"
+}
+```
+
+---
+
+### Listar pacientes
+
+**GET**
+
+```
+/api/pacientes
+```
+
+---
+
+## Consultas
+
+### Criar consulta
+
+**POST**
+
+```
+/api/consultas
+```
+
+Body:
+
+```json
+{
+  "medico_id": 1,
+  "paciente_id": 1,
+  "data": "2026-06-01 10:00"
+}
+```
+
+---
+
+### Listar consultas
+
+**GET**
+
+```
+/api/consultas
+```
+
+---
+
+# Validações
+
+A API possui validação de dados nas requisições utilizando os mecanismos nativos do Laravel.
+
+Campos obrigatórios são verificados antes da persistência no banco de dados, garantindo a integridade das informações enviadas para a API.
+
+---
+
+# Estrutura do Projeto
+
+```
+app
+ ├ Domain
+ │   ├ Medico.php
+ │   ├ Paciente.php
+ │   └ Consulta.php
+ │
+ ├ Models
+ │   ├ Medico.php
+ │   ├ Paciente.php
+ │   └ Consulta.php
+ │
+ ├ Http
+ │   └ Controllers
+ │        ├ MedicoController.php
+ │        ├ PacienteController.php
+ │        └ ConsultaController.php
+```
+
+---
+
+# Arquitetura
+
+A aplicação segue uma separação básica de responsabilidades:
+
+* **Domain** → entidades de domínio e regras de negócio
+* **Models (Eloquent)** → persistência de dados no banco
+* **Controllers** → exposição dos endpoints da API
+
+---
+
+# Melhorias Futuras
+
+Algumas melhorias que poderiam ser implementadas:
+
+* Paginação de resultados nas listagens
+* Testes automatizados
+* Verificação de conflito de horários de consultas
+* Versionamento da API
+
+---
+
+# Autor
+
+Projeto desenvolvido por mim (Arthur de Almeida Ferreira) como parte dos exercícios na Unimed Cricíuma.
