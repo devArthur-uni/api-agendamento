@@ -17,6 +17,12 @@ class PacienteController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'nome' => 'required|string',
+            'sobrenome' => 'required|string',
+            'cpf' => 'required|string',
+            'data_nascimento' => 'required|date_format:Y-m-d'
+        ]);
         $nome = $request->input('nome');
         $sobrenome = $request->input('sobrenome');
         $cpf = $request->input('cpf');
@@ -30,7 +36,7 @@ class PacienteController extends Controller
         );
 
         return response()->json([
-            "mensagem" => "Paciente cadastrado",
+            "mensagem" => "Paciente cadastrado!",
             "paciente" => $paciente->getInformacoes()
         ]);
     }

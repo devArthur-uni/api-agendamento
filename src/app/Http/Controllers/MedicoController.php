@@ -17,6 +17,11 @@ class MedicoController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'nome' => 'required|string',
+            'sobrenome' => 'required|string',
+            'crm' => 'required|string'
+        ]);
         $nome = $request->input('nome');
         $sobrenome = $request->input('sobrenome');
         $crm = $request->input('crm');
@@ -24,7 +29,7 @@ class MedicoController extends Controller
         $medico = new Medico($nome, $sobrenome, $crm);
 
         return response()->json([
-            "mensagem" => "Médico cadastrado",
+            "mensagem" => "Médico cadastrado!",
             "medico" => $medico->getInformacoes()
         ]);
     }
